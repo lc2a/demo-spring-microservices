@@ -1,0 +1,27 @@
+server:
+  port: 8060
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+      
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: greet-service
+        uri: lb://greet-service
+        predicates:
+        - Path=/greet/**
+      - id: hello-service
+        uri: lb://hello-service
+        predicates:
+        - Path=/hello/**
+      - id: hi-service
+        uri: lb://hi-service
+        predicates:
+        - Path=/greet/**
