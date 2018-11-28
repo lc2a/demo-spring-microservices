@@ -24,4 +24,4 @@ spring:
       - id: hi-service
         uri: lb://hi-service
         predicates:
-        - Path=/greet/**
+        - Path=/hi/**
