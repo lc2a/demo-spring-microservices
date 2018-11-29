@@ -1,0 +1,64 @@
+version: "3"
+services:
+    config-server:
+        build: config-server
+        ports:
+            - "8888:8888"
+    service-registry:
+        build: service-registry
+        ports:
+            - "8761:8761"
+        environment:
+          WAIT_HOSTS: config-server:8888
+        links:
+            - config-server:config-server
+    greet-service:
+        build: greet-service
+        links:
+            - config-server:config-server
+        depends_on:
+            - config-server
+        environment:
+          WAIT_HOSTS: service-registry:8761
+          WAIT_SLEEP_INTERVAL: 5
+          WAIT_HOSTS_TIMEOUT: 300
+    hello-service:
+        build: hello-service
+        links:
+            - config-server:config-server
+        depends_on:
+            - config-server
+        environment:
+          WAIT_HOSTS: greet-service:8001
+          WAIT_SLEEP_INTERVAL: 5
+          WAIT_HOSTS_TIMEOUT: 300
+    hi-service:
+        build: hi-service
+        links:
+            - config-server:config-server
+        depends_on:
+            - config-server
+        environment:
+          WAIT_HOSTS: hello-service:8002
+          WAIT_SLEEP_INTERVAL: 5
+          WAIT_HOSTS_TIMEOUT: 300
+    gateway-service:
+        build: gateway-service
+        ports:
+            - "8060:8060"
+        links:
+            - config-server:config-server
+            - service-registry:service-registry
+            - greet-service:greet-service
+            - hello-service:hello-service
+            - hi-service:hi-service
+        depends_on:
+            - config-server
+            - service-registry
+            - greet-service
+            - hello-service
+            - hi-service
+        environment:
+          WAIT_HOSTS: hi-service:8003
+          WAIT_SLEEP_INTERVAL: 5
+          WAIT_HOSTS_TIMEOUT: 300
