@@ -10,3 +10,14 @@ Run Terminal/Powershell (as administrator)
 Run on browser
 - http://localhost:8060/greet/api/hi
 - http://localhost:8060/greet/api/hello
+
+<b>Diagram</b>
+
+Config Service
+
+<img src="https://raw.githubusercontent.com/npsarawut/demo-spring-microservices/master/diagram/Config-Diagram.png" />
+
+
+Call API Gateway
+
+<img src="https://raw.githubusercontent.com/npsarawut/demo-spring-microservices/master/diagram/Gateway-Diagram.png" />
