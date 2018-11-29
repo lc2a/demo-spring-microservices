@@ -1,0 +1,36 @@
+server:
+  port: 8060
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka/
+logging:
+  pattern: 
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: greet-service
+        uri: lb://greet-service
+        predicates:
+        - Path=/greet/**
+        filters:
+        - RewritePath=/greet/(?<path>.*), /$\{path}
+      - id: hello-service
+        uri: lb://hello-service
+        predicates:
+        - Path=/hello/**
+        filters:
+        - RewritePath=/hello/(?<path>.*), /$\{path}
+      - id: hi-service
+        uri: lb://hi-service
+        predicates:
+        - Path=/hi/**
+        filters:
+        - RewritePath=/hi/(?<path>.*), /$\{path}
